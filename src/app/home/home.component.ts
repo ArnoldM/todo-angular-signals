@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { TodoFormComponent } from './ui/todo-form.component';
-import { Todo } from '../shared/interfaces/todo';
 import { TodoService } from '../shared/data-acces/todo.service';
 import { TodoListComponent } from './ui/todo-list.component';
 
