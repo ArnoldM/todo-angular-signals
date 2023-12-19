@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Todo } from '../../shared/interfaces/todo';
 import { RouterLink } from '@angular/router';
-import { NgStyle } from '@angular/common';
+import { NgClass, NgStyle } from '@angular/common';
 
 @Component({
   standalone: true,
@@ -9,13 +9,10 @@ import { NgStyle } from '@angular/common';
   template: `
     <ul>
       @for (todo of todos; track todo.id) {
-      <li>
+      <li [ngClass]="{ completed: todo.completed }">
+        <button (click)="deleteTodo.emit(todo)" class="delete-btn">X</button>
         <a [routerLink]="['/detail', todo.id]">{{ todo.title }}</a>
-        &nbsp;
-        <button
-          (click)="toggleTodoState.emit(todo)"
-          [ngStyle]="{ 'background-color': todo.completed ? 'green' : 'red' }"
-        >
+        <button (click)="toggleTodoState.emit(todo)" class="toggle-btn">
           @if (todo.completed) { Completed } @else { Todo }
         </button>
       </li>
@@ -24,12 +21,46 @@ import { NgStyle } from '@angular/common';
       }
     </ul>
   `,
-  imports: [RouterLink, NgStyle],
+  imports: [RouterLink, NgStyle, NgClass],
   styles: [
     `
       ul {
         margin: 0;
         padding: 1rem;
+      }
+      li {
+        display: flex;
+        align-items: stretch;
+        list-style: none;
+      }
+      a {
+        flex: 1;
+        text-decoration: none;
+        color: gray;
+      }
+      button {
+        background-color: white;
+        padding: 10px;
+        border: 1px solid;
+      }
+      .delete-btn {
+        color: red;
+        border-color: red;
+        border-radius: 4px 0 0 4px;
+      }
+      .toggle-btn {
+        color: #0077cc;
+        border-color: #0077cc;
+        border-radius: 0 4px 4px 0;
+      }
+      .completed {
+        .toggle-btn {
+          color: green;
+          border-color: green;
+        }
+        a {
+          text-decoration: line-through;
+        }
       }
     `,
   ],
@@ -37,4 +68,5 @@ import { NgStyle } from '@angular/common';
 export class TodoListComponent {
   @Input({ required: true }) todos!: Todo[];
   @Output() toggleTodoState = new EventEmitter<Todo>();
+  @Output() deleteTodo = new EventEmitter<Todo>();
 }

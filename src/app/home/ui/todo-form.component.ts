@@ -8,7 +8,7 @@ import { CreateTodo, Todo } from '../../shared/interfaces/todo';
   template: `
     <form
       [formGroup]="todoForm"
-      (ngSubmit)="todoSubmitted.emit(todoForm.getRawValue())"
+      (ngSubmit)="submit()"
     >
       <input type="text" formControlName="title" placeholder="title..." />
       <input
@@ -30,4 +30,9 @@ export class TodoFormComponent {
   });
 
   @Output() todoSubmitted = new EventEmitter<CreateTodo>();
+
+  submit() {
+    this.todoSubmitted.emit(this.todoForm.getRawValue());
+    this.todoForm.reset();
+  }
 }
